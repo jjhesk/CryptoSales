@@ -18,12 +18,13 @@ import "../vendor/v0.6/ReentrancyGuard.sol";
  * the methods to add functionality. Consider using 'super' where appropriate to concatenate
  * behavior.
  */
-contract Crowdsale is Context, ReentrancyGuard {
+contract CrowdsaleUsd is Context, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     // The token being sold
     IERC20 private _token;
+    IERC20 private _usdt;
 
     // Address where funds are collected
     address payable private _wallet;
@@ -62,6 +63,7 @@ contract Crowdsale is Context, ReentrancyGuard {
         _rate = rate;
         _wallet = wallet;
         _token = token;
+        _usdt = IERC20("0x0823478923748972947928374987239847298374982");
     }
 
     /**
@@ -110,7 +112,7 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @param beneficiary Recipient of the token purchase
      */
     function buyTokens(address beneficiary) public nonReentrant payable {
-        uint256 weiAmount = msg.value;
+        uint256 weiAmount = _usdt.allowance(beneficiary, address(this));
         _preValidatePurchase(beneficiary, weiAmount);
         // calculate token amount to be created
         uint256 tokens = _getTokenAmount(weiAmount);
@@ -119,7 +121,7 @@ contract Crowdsale is Context, ReentrancyGuard {
         _processPurchase(beneficiary, tokens);
         emit TokensPurchased(_msgSender(), beneficiary, weiAmount, tokens);
         _updatePurchasingState(beneficiary, weiAmount);
-        _forwardFunds();
+        _forwardFunds(beneficiary, weiAmount);
         _postValidatePurchase(beneficiary, weiAmount);
     }
 
@@ -155,7 +157,7 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @param beneficiary Address performing the token purchase
      * @param tokenAmount Number of tokens to be emitted
      */
-    function _deliverTokens(address beneficiary, uint256 tokenAmount) internal virtual{
+    function _deliverTokens(address beneficiary, uint256 tokenAmount) internal virtual {
         _token.safeTransfer(beneficiary, tokenAmount);
     }
 
@@ -165,7 +167,7 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @param beneficiary Address receiving the tokens
      * @param tokenAmount Number of tokens to be purchased
      */
-    function _processPurchase(address beneficiary, uint256 tokenAmount) internal virtual{
+    function _processPurchase(address beneficiary, uint256 tokenAmount) internal virtual {
         _deliverTokens(beneficiary, tokenAmount);
     }
 
@@ -191,13 +193,10 @@ contract Crowdsale is Context, ReentrancyGuard {
     /**
      * @dev Determines how ETH is stored/forwarded on purchases.
      */
-    function _forwardFunds() internal virtual{
-        safeTransferETH(_wallet, msg.value);
+    function _forwardFunds(address fromsender, uint value) internal virtual {
+        (bool success,) = _usdt.transferFrom(fromsender, _wallet, value);
+        require(success, 'USD_TRANSFER_FAILED');
     }
 
-    function safeTransferETH(address to, uint value) internal {
-        (bool success,) = to.call{value : value}(new bytes(0));
-        require(success, 'ETH_TRANSFER_FAILED');
-    }
 
 }
