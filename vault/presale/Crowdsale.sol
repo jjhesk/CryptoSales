@@ -195,7 +195,7 @@ contract Crowdsale is Context, ReentrancyGuard {
         safeTransferETH(_wallet, msg.value);
     }
 
-    function safeTransferETH(address to, uint value) internal {
+    function safeTransferETH(address to, uint value) internal{
         (bool success,) = to.call{value : value}(new bytes(0));
         require(success, 'ETH_TRANSFER_FAILED');
     }

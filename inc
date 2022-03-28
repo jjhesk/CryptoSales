@@ -125,18 +125,15 @@ build_abi_generation() {
 
 # !/usr/bin/env python
 # coding: utf-8
-
 import os
-
 from moody import conf, Evm
 from moody.libeb import MiliDoS
-
 
 NETWORK = conf.RSCMainnet()
 SOLV = "0.6.12"
 CONTRACT_LIST = [
     "vault/presale/price/IncreasingPriceCrowdsale.sol",
-    "vault/presale/price/BlindBoxSale.sol"
+    "vault/presale/price/BlindBoxCrowdsale.sol"
 ]
 
 dos = MiliDoS(NETWORK)
@@ -330,6 +327,6 @@ backup_deploy() {
 }
 # Please setup your local path for local transpiling
 # LOCAL MACHINE ONLY the default path
-BUILDPATH="$HOME/Documents/b95/LayerZeroUsdt"
+BUILDPATH="$HOME/Documents/b95/CryptoSales/"
 BUILD_DIR="$BUILDPATH/build"
 FACTORY=$HOME/Documents/piplines/factoryabi

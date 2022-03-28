@@ -3,16 +3,22 @@ pragma solidity ^0.6.0;
 import "../../vendor/v0.6/SafeMath.sol";
 import "../validation/TimedCrowdsale.sol";
 
-contract BlindBoxSale is TimedCrowdsale {
+contract BlindBoxCrowdsale is TimedCrowdsale {
     using SafeMath for uint256;
 
     uint256 private _upperRate;
     uint256 private _lowerRate;
 
+
     /**
      * @dev Constructor, takes initial and final rates of tokens received per wei contributed.
-     * @param initialRate Number of tokens a buyer gets per wei at the start of the crowdsale
-     * @param finalRate Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param minRate Number of tokens a buyer gets per wei at the start of the crowdsale
+     * @param maxRate Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param startTime Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param endTime Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param rate Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param wallet Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param token Number of tokens a buyer gets per wei at the end of the crowdsale
      */
     constructor (
         uint256 minRate,
@@ -54,16 +60,16 @@ contract BlindBoxSale is TimedCrowdsale {
         }
 
         // solhint-disable-next-line not-rely-on-time
-        uint256 elapsedTime = block.timestamp.sub(openingTime());
-        uint256 timeRange = closingTime().sub(openingTime());
-        uint256 rateRange = _upperRate.sub(_lowerRate);
+        //uint256 elapsedTime = block.timestamp.sub(openingTime());
+        //uint256 timeRange = closingTime().sub(openingTime());
+        //uint256 rateRange = _upperRate.sub(_lowerRate);
 
         return getRandomNumber(_upperRate, _lowerRate, _msgSender());
         //  return _initialRate.sub(elapsedTime.mul(rateRange).div(timeRange));
     }
 
-    function getRandomNumber(uint16 maxRandom, uint8 min, address privateAddress) public pure returns (uint8) {
-        uint256 genNum = uint256(block.blockhash(block.number - 1)) + uint256(privateAddress);
+    function getRandomNumber(uint256 maxRandom, uint256 min, address privateAddress) public view returns (uint8) {
+        uint256 genNum = uint256(blockhash(block.number - 1)) + uint256(privateAddress);
         return uint8(genNum % (maxRandom - min + 1) + min);
     }
 

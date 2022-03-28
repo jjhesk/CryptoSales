@@ -7,7 +7,7 @@ import "../Crowdsale.sol";
  * @title TimedCrowdsale
  * @dev Crowdsale accepting contributions only within a time frame.
  */
-contract TimedCrowdsale is Crowdsale {
+abstract contract TimedCrowdsale is Crowdsale {
     using SafeMath for uint256;
     uint256 private _openingTime;
     uint256 private _closingTime;
@@ -76,7 +76,7 @@ contract TimedCrowdsale is Crowdsale {
      * @param beneficiary Token purchaser
      * @param weiAmount Amount of wei contributed
      */
-    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyWhileOpen view {
+    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal override onlyWhileOpen view {
         super._preValidatePurchase(beneficiary, weiAmount);
     }
 

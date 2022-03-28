@@ -19,6 +19,11 @@ contract IncreasingPriceCrowdsale is TimedCrowdsale {
      * @dev Constructor, takes initial and final rates of tokens received per wei contributed.
      * @param initialRate Number of tokens a buyer gets per wei at the start of the crowdsale
      * @param finalRate Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param startTime Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param endTime Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param rate Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param wallet Number of tokens a buyer gets per wei at the end of the crowdsale
+     * @param token Number of tokens a buyer gets per wei at the end of the crowdsale
      */
     constructor (
         uint256 initialRate,
