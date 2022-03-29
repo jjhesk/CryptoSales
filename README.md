@@ -8,7 +8,7 @@ The sale of tokens support the below features for convenient use.
 4. SafeERC20 transfer
 5. Support GoLang, Typescript, Python
 
-### Setup local paths
+### Setup contract development local paths
 Please setup your local path for local transpiling
 LOCAL MACHINE ONLY the default path
 
