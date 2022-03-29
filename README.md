@@ -17,3 +17,5 @@ BUILDPATH=
 BUILD_DIR=
 FACTORY=
 ```
+
+Create a file named `node.txt` and enter the evm compiler IP address.
